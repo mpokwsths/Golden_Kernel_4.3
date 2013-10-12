@@ -425,6 +425,9 @@ bool dss_has_feature(enum dss_feat_id id)
 {
 	return omap_current_dss_features->has_feature & id;
 }
+#if defined(CONFIG_SND_SOC_OMAP_HDMI_CODEC_MODULE)
+EXPORT_SYMBOL(dss_has_feature);
+#endif
 
 void dss_feat_get_reg_field(enum dss_feat_reg_field id, u8 *start, u8 *end)
 {

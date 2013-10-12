@@ -490,11 +490,17 @@ int omapdss_hdmi_get_pixel_clock(void)
 {
 	return PICOS2KHZ(hdmi.cfg.timings.pixclock);
 }
+#if defined(CONFIG_SND_SOC_OMAP_HDMI_CODEC_MODULE)
+EXPORT_SYMBOL(omapdss_hdmi_get_pixel_clock);
+#endif
 
 int omapdss_hdmi_get_mode(void)
 {
 	return hdmi.mode;
 }
+#if defined(CONFIG_SND_SOC_OMAP_HDMI_CODEC_MODULE)
+EXPORT_SYMBOL(omapdss_hdmi_get_mode);
+#endif
 
 int omapdss_hdmi_register_hdcp_callbacks(void (*hdmi_start_frame_cb)(void),
 					 void (*hdmi_irq_cb)(int status),

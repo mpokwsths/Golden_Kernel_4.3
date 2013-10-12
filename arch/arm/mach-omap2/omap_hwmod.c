@@ -282,6 +282,9 @@ static int _set_slave_idlemode(struct omap_hwmod *oh, u8 idlemode, u32 *v)
 
 	return 0;
 }
+#if defined(CONFIG_SND_SOC_OMAP_HDMI_CODEC_MODULE)
+EXPORT_SYMBOL(_set_slave_idlemode);
+#endif
 
 /**
  * _set_clockactivity: set OCP_SYSCONFIG.CLOCKACTIVITY bits in @v
@@ -1643,6 +1646,9 @@ int omap_hwmod_set_slave_idlemode(struct omap_hwmod *oh, u8 idlemode)
 
 	return retval;
 }
+#if defined(CONFIG_SND_SOC_OMAP_HDMI_CODEC_MODULE)
+EXPORT_SYMBOL(omap_hwmod_set_slave_idlemode);
+#endif
 
 /**
  * omap_hwmod_lookup - look up a registered omap_hwmod by name
@@ -1662,6 +1668,9 @@ struct omap_hwmod *omap_hwmod_lookup(const char *name)
 
 	return oh;
 }
+#if defined(CONFIG_SND_SOC_OMAP_HDMI_CODEC_MODULE)
+EXPORT_SYMBOL(omap_hwmod_lookup);
+#endif
 
 /**
  * omap_hwmod_for_each - call function for each registered omap_hwmod
