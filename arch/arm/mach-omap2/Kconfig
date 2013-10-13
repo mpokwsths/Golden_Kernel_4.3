@@ -410,4 +410,22 @@ config FORCE_FAST_CHARGE
 	  A simple sysfs interface to force adapters that
 	  are detected as USB to charge as AC.
 
+config TUNA_BIGMEM_S1
+	bool "11 MB less RAM for Tuna (compared to SuperRAM)"
+	depends on MACH_TUNA
+	default n
+	help
+	  If enabled, approximately 69 MB of additional RAM will be available,
+	  while 1080p video encoding & decoding functionality will be
+	  unavailable.
+
+config TUNA_BIGMEM_S2
+	bool "22 MB less RAM for Tuna (compared to SuperRAM)"
+	depends on MACH_TUNA
+	default n
+	help
+	  If enabled, approximately 58 MB of additional RAM will be available,
+	  while 1080p video encoding & decoding functionality will be fully
+	  available.
+
 endif
