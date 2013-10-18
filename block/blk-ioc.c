@@ -43,8 +43,6 @@ int put_io_context(struct io_context *ioc)
 		rcu_read_lock();
 
 		queue_data_dtor(ioc);
-//		hlist_sched_dtor(ioc, &ioc->cic_list);
-//		hlist_sched_dtor(ioc, &ioc->bfq_cic_list);
 		rcu_read_unlock();
 
 		kmem_cache_free(iocontext_cachep, ioc);
@@ -78,8 +76,6 @@ void exit_io_context(struct task_struct *task)
 	task_unlock(task);
 
 	if (atomic_dec_and_test(&ioc->nr_tasks)) {
-//		hlist_sched_exit(ioc, &ioc->cic_list);
-//		hlist_sched_exit(ioc, &ioc->bfq_cic_list);
 		queue_data_exit(ioc);
 	}
 
