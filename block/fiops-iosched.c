@@ -17,6 +17,8 @@
 
 #define VIOS_READ_SCALE (1)
 #define VIOS_WRITE_SCALE (1)
+#define VIOS_SYNC_SCALE (2)
+#define VIOS_ASYNC_SCALE (5)
 
 struct fiops_rb_root {
 	struct rb_root rb;
@@ -38,6 +40,8 @@ struct fiops_data {
 
 	unsigned int read_scale;
 	unsigned int write_scale;
+	unsigned int sync_scale;
+	unsigned int async_scale;
 };
 
 struct fiops_ioc {
@@ -278,6 +282,9 @@ static u64 fiops_scaled_vios(struct fiops_data *fiopsd,
 		return VIOS_SCALE;
 	else
 		return VIOS_SCALE * fiopsd->write_scale / fiopsd->read_scale;
+
+	if (!rq_is_sync(rq))
+		vios = vios * fiopsd->async_scale / fiopsd->sync_scale;
 }
 
 /* return vios dispatched */
@@ -551,6 +558,8 @@ static void *fiops_init_queue(struct request_queue *q)
 
 	fiopsd->read_scale = VIOS_READ_SCALE;
 	fiopsd->write_scale = VIOS_WRITE_SCALE;
+	fiopsd->sync_scale = VIOS_SYNC_SCALE;
+	fiopsd->async_scale = VIOS_ASYNC_SCALE;
 
 	return fiopsd;
 }
@@ -648,6 +657,8 @@ static ssize_t __FUNC(struct elevator_queue *e, char *page)		\
 }
 SHOW_FUNCTION(fiops_read_scale_show, fiopsd->read_scale);
 SHOW_FUNCTION(fiops_write_scale_show, fiopsd->write_scale);
+SHOW_FUNCTION(fiops_sync_scale_show, fiopsd->sync_scale);
+SHOW_FUNCTION(fiops_async_scale_show, fiopsd->async_scale);
 #undef SHOW_FUNCTION
 
 #define STORE_FUNCTION(__FUNC, __PTR, MIN, MAX)				\
@@ -665,6 +676,8 @@ static ssize_t __FUNC(struct elevator_queue *e, const char *page, size_t count)	
 }
 STORE_FUNCTION(fiops_read_scale_store, &fiopsd->read_scale, 1, 100);
 STORE_FUNCTION(fiops_write_scale_store, &fiopsd->write_scale, 1, 100);
+STORE_FUNCTION(fiops_sync_scale_store, &fiopsd->sync_scale, 1, 100);
+STORE_FUNCTION(fiops_async_scale_store, &fiopsd->async_scale, 1, 100);
 #undef STORE_FUNCTION
 
 #define FIOPS_ATTR(name) \
@@ -673,6 +686,8 @@ STORE_FUNCTION(fiops_write_scale_store, &fiopsd->write_scale, 1, 100);
 static struct elv_fs_entry fiops_attrs[] = {
 	FIOPS_ATTR(read_scale),
 	FIOPS_ATTR(write_scale),
+	FIOPS_ATTR(sync_scale),
+	FIOPS_ATTR(async_scale),
 	__ATTR_NULL
 };
 
