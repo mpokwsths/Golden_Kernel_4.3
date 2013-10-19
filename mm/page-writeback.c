@@ -62,7 +62,7 @@ static inline long sync_writeback_pages(unsigned long dirtied)
 /*
  * Start background writeback (via writeback threads) at this percentage
  */
-int dirty_background_ratio = 12;
+int dirty_background_ratio = 10;
 
 /*
  * dirty_background_bytes starts at 0 (disabled) so that it is a function of
@@ -79,7 +79,7 @@ int vm_highmem_is_dirtyable;
 /*
  * The generator of dirty data starts writeback at this percentage
  */
-int vm_dirty_ratio = 25;
+int vm_dirty_ratio = 20;
 
 /*
  * vm_dirty_bytes starts at 0 (disabled) so that it is a function of
@@ -785,16 +785,16 @@ static struct notifier_block __cpuinitdata ratelimit_nb = {
 
 static void dirty_early_suspend(struct early_suspend *handler)
 {
-	dirty_background_ratio = 30;
-	vm_dirty_ratio = 50;
+	dirty_background_ratio = 50;
+	vm_dirty_ratio = 70;
 	dirty_writeback_interval = 2000;
 	dirty_expire_interval = 1000;
 }
 
 static void dirty_late_resume(struct early_suspend *handler)
 {
-	dirty_background_ratio = 5;
-	vm_dirty_ratio = 15;
+	dirty_background_ratio = 10;
+	vm_dirty_ratio = 20;
 	dirty_writeback_interval = 0;
 	dirty_expire_interval = 200;
 }
