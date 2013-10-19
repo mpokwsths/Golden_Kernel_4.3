@@ -44,6 +44,7 @@ struct fiops_data {
 	struct fiops_rb_root service_tree[FIOPS_PRIO_NR];
 
 	unsigned int busy_queues;
+	unsigned int in_flight[2];
 
 	struct work_struct unplug_work;
 
@@ -61,6 +62,8 @@ struct fiops_ioc {
 	struct rb_node rb_node;
 	u64 vios; /* key in service_tree */
 	struct fiops_rb_root *service_tree;
+
+	unsigned int in_flight;
 
 	struct rb_root sort_list;
 	struct list_head fifo;
@@ -328,6 +331,9 @@ static u64 fiops_dispatch_request(struct fiops_data *fiopsd,
 	fiops_remove_request(rq);
 	elv_dispatch_sort(q, rq);
 
+	fiopsd->in_flight[rq_is_sync(rq)]++;
+	ioc->in_flight++;
+
 	return fiops_scaled_vios(fiopsd, ioc, rq);
 }
 
@@ -357,6 +363,7 @@ static struct fiops_ioc *fiops_select_ioc(struct fiops_data *fiopsd)
 	struct fiops_ioc *ioc;
 	struct fiops_rb_root *service_tree = NULL;
 	int i;
+	struct request *rq;
 
 	for (i = RT_WORKLOAD; i >= IDLE_WORKLOAD; i--) {
 		if (!RB_EMPTY_ROOT(&fiopsd->service_tree[i].rb)) {
@@ -369,6 +376,17 @@ static struct fiops_ioc *fiops_select_ioc(struct fiops_data *fiopsd)
  		return NULL;
 
 	ioc = fiops_rb_first(service_tree);
+
+	rq = rq_entry_fifo(ioc->fifo.next);
+	/*
+	 * we are the only async task and sync requests are in flight, delay a
+	 * moment. If there are other tasks coming, sync tasks have no chance
+	 * to be starved, don't delay
+	 */
+	if (!rq_is_sync(rq) && fiopsd->in_flight[1] != 0 &&
+			service_tree->count == 1)
+		return NULL;
+
  	return ioc;
 }
 
@@ -464,6 +482,18 @@ static inline void fiops_schedule_dispatch(struct fiops_data *fiopsd)
 	if (fiopsd->busy_queues)
 		kblockd_schedule_work(fiopsd->qdata.queue,
 				      &fiopsd->unplug_work);
+}
+
+static void fiops_completed_request(struct request_queue *q, struct request *rq)
+{
+	struct fiops_data *fiopsd = q->elevator->elevator_data;
+	struct fiops_ioc *ioc = RQ_CIC(rq);
+
+	fiopsd->in_flight[rq_is_sync(rq)]--;
+	ioc->in_flight--;
+
+	if (fiopsd->in_flight[0] + fiopsd->in_flight[1] == 0)
+		fiops_schedule_dispatch(fiopsd);
 }
 
 static int
@@ -785,6 +815,7 @@ static struct elevator_type iosched_fiops = {
 		.elevator_allow_merge_fn =	fiops_allow_merge,
 		.elevator_dispatch_fn =		fiops_dispatch_requests,
 		.elevator_add_req_fn =		fiops_insert_request,
+		.elevator_completed_req_fn =	fiops_completed_request,
 		.elevator_former_req_fn =	elv_rb_former_request,
 		.elevator_latter_req_fn =	elv_rb_latter_request,
 		.elevator_set_req_fn =		fiops_set_request,
