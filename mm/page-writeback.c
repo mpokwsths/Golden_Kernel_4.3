@@ -93,7 +93,7 @@ unsigned long vm_dirty_bytes;
 #define DEFAULT_DIRTY_WRITEBACK_INTERVAL 0 /* centiseconds */
 unsigned int dirty_writeback_interval,
 		resume_dirty_writeback_interval;
-suspend_dirty_writeback_interval = 2000;
+int suspend_dirty_writeback_interval = 2000;
 
 
 /*
@@ -102,7 +102,7 @@ suspend_dirty_writeback_interval = 2000;
 #define DEFAULT_DIRTY_EXPIRE_INTERVAL 200 /* centiseconds */
 unsigned int dirty_expire_interval,
 		resume_dirty_expire_interval;
-suspend_dirty_expire_interval = 1000;
+int suspend_dirty_expire_interval = 1000;
 
 /*
  * Flag that makes the machine dump writes/reads and block dirtyings.
@@ -379,7 +379,6 @@ static unsigned long highmem_dirtyable_memory(unsigned long total)
 		 * make sure that the number of pages for this node
 		 * is never "negative".
 		 */
-		nr_pages -= min(nr_pages, z->dirty_balance_reserve);
 		x += nr_pages;
 	}
 	/*
@@ -405,7 +404,6 @@ unsigned long determine_dirtyable_memory(void)
 	unsigned long x;
 
 	x = global_page_state(NR_FREE_PAGES) + global_reclaimable_pages();
-	x -= min(x, dirty_balance_reserve);
 
 	if (!vm_highmem_is_dirtyable)
 		x -= min(x, highmem_dirtyable_memory(x));
