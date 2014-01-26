@@ -44,7 +44,6 @@ struct pm_qos_request_list mbox_qos_request;
 #else
 #define SET_MPU_CORE_CONSTRAINT 400
 #endif
-#define SET_MPU_CORE_CONSTRAINT 10
 #define CLEAR_MPU_CORE_CONSTRAINT -1
 
 static unsigned int mbox_kfifo_size = CONFIG_OMAP_MBOX_KFIFO_SIZE;
