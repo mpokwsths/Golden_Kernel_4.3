@@ -119,55 +119,6 @@ struct omap_vdd_dep_info omap443x_vddiva_dep_info[] = {
 	{.name = NULL, .dep_table = NULL, .nr_dep_entries = 0},
 };
 
-static struct omap_opp_def __initdata omap443x_opp_def_list[] = {
-	/* MPU OPP1 - OPP50 */
-	OPP_INITIALIZER("mpu", "dpll_mpu_ck", "mpu", true, 300000000, OMAP4430_VDD_MPU_OPP50_UV),
-	/* MPU OPP2 - OPP100 */
-	OPP_INITIALIZER("mpu", "dpll_mpu_ck", "mpu", true, 600000000, OMAP4430_VDD_MPU_OPP100_UV),
-	/* MPU OPP3 - OPP-Turbo */
-	OPP_INITIALIZER("mpu", "dpll_mpu_ck", "mpu", true, 800000000, OMAP4430_VDD_MPU_OPPTURBO_UV),
-	/* MPU OPP4 - OPP-SB */
-	OPP_INITIALIZER("mpu", "dpll_mpu_ck", "mpu", true, 1008000000, OMAP4430_VDD_MPU_OPPNITRO_UV),
-	/* L3 OPP1 - OPP50 */
-	OPP_INITIALIZER("l3_main_1", "virt_l3_ck", "core", true, 100000000, OMAP4430_VDD_CORE_OPP50_UV),
-	/* L3 OPP2 - OPP100, OPP-Turbo, OPP-SB */
-	OPP_INITIALIZER("l3_main_1", "virt_l3_ck", "core", true, 200000000, OMAP4430_VDD_CORE_OPP100_UV),
-	/* IVA OPP1 - OPP50 */
-	OPP_INITIALIZER("iva", "virt_iva_ck", "iva", true, 133000000, OMAP4430_VDD_IVA_OPP50_UV),
-	/* IVA OPP2 - OPP100 */
-	OPP_INITIALIZER("iva", "virt_iva_ck", "iva", true, 266100000, OMAP4430_VDD_IVA_OPP100_UV),
-	/* IVA OPP3 - OPP-Turbo */
-	OPP_INITIALIZER("iva", "virt_iva_ck", "iva", false, 332000000, OMAP4430_VDD_IVA_OPPTURBO_UV),
-	/* SGX OPP1 - OPP50 */
-	OPP_INITIALIZER("iva", "virt_iva_ck", "iva", false, 332000000, OMAP4430_VDD_IVA_OPPTURBO_UV),
-	/* SGX OPP2 - OPP100 */
-	OPP_INITIALIZER("gpu", "dpll_per_m7x2_ck", "core", true, 307200000, OMAP4430_VDD_CORE_OPP100_UV),
-	/* FDIF OPP1 - OPP25 */
-	OPP_INITIALIZER("fdif", "fdif_fck", "core", true, 32000000, OMAP4430_VDD_CORE_OPP50_UV),
-	/* FDIF OPP2 - OPP50 */
-	OPP_INITIALIZER("fdif", "fdif_fck", "core", true, 64000000, OMAP4430_VDD_CORE_OPP50_UV),
-	/* FDIF OPP3 - OPP100 */
-	OPP_INITIALIZER("fdif", "fdif_fck", "core", true, 128000000, OMAP4430_VDD_CORE_OPP100_UV),
-	/* DSP OPP1 - OPP50 */
-	OPP_INITIALIZER("dsp", "virt_dsp_ck", "iva", true, 232750000, OMAP4430_VDD_IVA_OPP50_UV),
-	/* DSP OPP2 - OPP100 */
-	OPP_INITIALIZER("dsp", "virt_dsp_ck", "iva", true, 465500000, OMAP4430_VDD_IVA_OPP100_UV),
-	/* DSP OPP3 - OPPTB */
-	OPP_INITIALIZER("dsp", "virt_dsp_ck", "iva", false, 496000000, OMAP4430_VDD_IVA_OPPTURBO_UV),
-	/* HSI OPP1 - OPP50 */
-	OPP_INITIALIZER("hsi", "hsi_fck", "core", true, 96000000, OMAP4430_VDD_CORE_OPP50_UV),
-	/* HSI OPP2 - OPP100 */
-	OPP_INITIALIZER("hsi", "hsi_fck", "core", true, 96000000, OMAP4430_VDD_CORE_OPP100_UV),
-	/* ABE OPP1 - OPP50 */
-	OPP_INITIALIZER("aess", "abe_clk", "iva", true, 98304000, OMAP4430_VDD_IVA_OPP50_UV),
-	/* ABE OPP2 - OPP100 */
-	OPP_INITIALIZER("aess", "abe_clk", "iva", true, 196608000, OMAP4430_VDD_IVA_OPP100_UV),
-	/* DSS OPP1 - OPP50 */
-	OPP_INITIALIZER("dss_dispc", "virt_lcd_pclk", "core", true, 93000000, OMAP4430_VDD_CORE_OPP50_UV),
-	/* DSS OPP2 - OPP100 */
-	OPP_INITIALIZER("dss_dispc", "virt_lcd_pclk", "core", true, 170000000, OMAP4430_VDD_CORE_OPP100_UV),
-};
-
 #define OMAP4460_VDD_MPU_OPP25_UV		 850000
 #define OMAP4460_VDD_MPU_OPP50_UV		 870000
 #define OMAP4460_VDD_MPU_OPP75_UV		 950000
