@@ -65,12 +65,15 @@ static DEFINE_MUTEX(omap_cpufreq_lock);
 
 static unsigned int max_thermal;
 unsigned int max_capped;
+EXPORT_SYMBOL(max_capped);
 static unsigned int min_capped;
 static unsigned int max_freq;
 static unsigned int current_target_freq;
 #define DEFAULT_SCREEN_OFF_MAX_FREQ 537600
 unsigned int screen_off_max_freq = DEFAULT_SCREEN_OFF_MAX_FREQ;
+EXPORT_SYMBOL(screen_off_max_freq);
 unsigned int screen_on_min_freq;
+EXPORT_SYMBOL(screen_on_min_freq);
 static bool omap_cpufreq_ready;
 static bool omap_cpufreq_suspended;
 static int oc_val;

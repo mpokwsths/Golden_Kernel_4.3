@@ -76,6 +76,10 @@ DEFINE_EVENT(loadeval, cpufreq_ondemandplus_already,
 	    TP_ARGS(cpu_id, load, curfreq, targfreq)
 );
 
+extern unsigned int max_capped;
+extern unsigned int screen_on_min_freq;
+extern unsigned int screen_off_max_freq;
+
 #endif /* _TRACE_CPUFREQ_ONDEMANDPLUS_H */
 
 /* This part must be outside protection */
