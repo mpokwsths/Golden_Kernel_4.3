@@ -1816,7 +1816,7 @@ static struct cleancache_ops zcache_cleancache_ops = {
 struct cleancache_ops zcache_cleancache_register_ops(void)
 {
 struct cleancache_ops old_ops =
-*cleancache_register_ops(&zcache_cleancache_ops);
+cleancache_register_ops(&zcache_cleancache_ops);
 
 return old_ops;
 }
