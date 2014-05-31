@@ -90,10 +90,9 @@ unsigned long vm_dirty_bytes;
 /*
  * The interval between `kupdate'-style writebacks
  */
-#define DEFAULT_DIRTY_WRITEBACK_INTERVAL 0 /* centiseconds */
+#define DEFAULT_DIRTY_WRITEBACK_INTERVAL 50 /* centiseconds */
 unsigned int dirty_writeback_interval,
 		resume_dirty_writeback_interval;
-int suspend_dirty_writeback_interval = 2000;
 
 
 /*
@@ -102,7 +101,6 @@ int suspend_dirty_writeback_interval = 2000;
 #define DEFAULT_DIRTY_EXPIRE_INTERVAL 200 /* centiseconds */
 unsigned int dirty_expire_interval,
 		resume_dirty_expire_interval;
-int suspend_dirty_expire_interval = 1000;
 
 /*
  * Flag that makes the machine dump writes/reads and block dirtyings.
@@ -791,17 +789,17 @@ static struct notifier_block __cpuinitdata ratelimit_nb = {
 
 static void dirty_early_suspend(struct early_suspend *handler)
 {
-	dirty_background_ratio = 50;
-	vm_dirty_ratio = 70;
+	dirty_background_ratio = 60;
+	vm_dirty_ratio = 75;
 	dirty_writeback_interval = 2000;
-	dirty_expire_interval = 1000;
+	dirty_expire_interval = 5000;
 }
 
 static void dirty_late_resume(struct early_suspend *handler)
 {
 	dirty_background_ratio = 10;
 	vm_dirty_ratio = 20;
-	dirty_writeback_interval = 0;
+	dirty_writeback_interval = 50;
 	dirty_expire_interval = 200;
 }
 

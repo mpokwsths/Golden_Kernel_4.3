@@ -65,15 +65,15 @@ struct alarm {
 	void			(*function)(struct alarm *);
 };
 
-void alarm_init(struct alarm *alarm,
+extern void alarm_init(struct alarm *alarm,
 	enum android_alarm_type type, void (*function)(struct alarm *));
-void alarm_start_range(struct alarm *alarm, ktime_t start, ktime_t end);
-int alarm_try_to_cancel(struct alarm *alarm);
-int alarm_cancel(struct alarm *alarm);
-ktime_t alarm_get_elapsed_realtime(void);
+extern void alarm_start_range(struct alarm *alarm, ktime_t start, ktime_t end);
+extern int alarm_try_to_cancel(struct alarm *alarm);
+extern int alarm_cancel(struct alarm *alarm);
+extern ktime_t alarm_get_elapsed_realtime(void);
 
 /* set rtc while preserving elapsed realtime */
-int alarm_set_rtc(const struct timespec ts);
+extern int alarm_set_rtc(const struct timespec ts);
 
 #endif
 
